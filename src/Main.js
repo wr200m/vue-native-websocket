@@ -14,7 +14,7 @@ export default {
     }
     Vue.prototype.$disconnect = function () {
       observer.reconnection = false
-      Vue.prototype.$socket.disconnect()
+      Vue.prototype.$socket.close()
       delete Vue.prototype.$socket
     }
 
