@@ -9,8 +9,7 @@ export default {
     let observer = null
 
     Vue.prototype.$connect = function () {
-      observer = new Observer(connection, opts)
-      Vue.prototype.$socket = observer.WebSocket
+      observer = new Observer(this, connection, opts)
     }
     Vue.prototype.$disconnect = function () {
       observer.reconnection = false

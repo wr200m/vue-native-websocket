@@ -1,7 +1,7 @@
 import Emitter from './Emitter'
 
 export default class {
-  constructor (connectionUrl, opts = {}) {
+  constructor (Vue, connectionUrl, opts = {}) {
     this.format = opts.format && opts.format.toLowerCase()
     this.connectionUrl = connectionUrl
     this.opts = opts
@@ -12,6 +12,7 @@ export default class {
     this.reconnectTimeoutId = 0
     this.reconnectionCount = 0
 
+    this.vue = Vue
     this.connect(connectionUrl, opts)
 
     if (opts.store) { this.store = opts.store }
@@ -26,7 +27,7 @@ export default class {
         this.WebSocket.sendObj = (obj) => this.WebSocket.send(JSON.stringify(obj))
       }
     }
-
+    this.vue.$socket = this.WebSocket
     return this.WebSocket
   }
 
@@ -50,10 +51,10 @@ export default class {
     ['onmessage', 'onclose', 'onerror', 'onopen'].forEach((eventType) => {
       this.WebSocket[eventType] = (event) => {
         Emitter.emit(eventType, event)
-
+        console.log(eventType, event)
         if (this.store) { this.passToStore('SOCKET_' + eventType, event) }
 
-        if (this.reconnection && this.eventType === 'onopen') { this.reconnectionCount = 0 }
+        if (this.reconnection && eventType === 'onopen') { this.reconnectionCount = 0 }
 
         if (this.reconnection && eventType === 'onclose') { this.reconnect(event) }
       }
