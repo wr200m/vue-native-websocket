@@ -51,7 +51,6 @@ export default class {
     ['onmessage', 'onclose', 'onerror', 'onopen'].forEach((eventType) => {
       this.WebSocket[eventType] = (event) => {
         Emitter.emit(eventType, event)
-        console.log(eventType, event)
         if (this.store) { this.passToStore('SOCKET_' + eventType, event) }
 
         if (this.reconnection && eventType === 'onopen') { this.reconnectionCount = 0 }

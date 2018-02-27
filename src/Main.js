@@ -16,8 +16,8 @@ export default {
         clearTimeout(observer.reconnectTimeoutId)
         observer.reconnection = false
       }
-      Vue.prototype.$socket.close()
-      delete Vue.prototype.$socket
+      this.$socket.close()
+      delete this.$socket
     }
 
     Vue.mixin({
