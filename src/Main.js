@@ -46,6 +46,7 @@ export default {
       },
       beforeDestroy () {
         let sockets = this.$options['sockets']
+
         if (observer !== null) {
           clearTimeout(observer.reconnectTimeoutId)
         }
