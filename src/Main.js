@@ -12,7 +12,10 @@ export default {
       observer = new Observer(this, connection, opts)
     }
     Vue.prototype.$disconnect = function () {
-      observer.reconnection = false
+      if (observer) {
+        clearTimeout(observer.reconnectTimeoutId)
+        observer.reconnection = false
+      }
       Vue.prototype.$socket.close()
       delete Vue.prototype.$socket
     }
@@ -43,7 +46,9 @@ export default {
       },
       beforeDestroy () {
         let sockets = this.$options['sockets']
-        clearTimeout(observer.reconnectTimeoutId)
+        if (observer !== null) {
+          clearTimeout(observer.reconnectTimeoutId)
+        }
 
         if (sockets) {
           Object.keys(sockets).forEach((key) => {
